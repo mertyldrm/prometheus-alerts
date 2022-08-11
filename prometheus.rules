@@ -1,0 +1,20 @@
+groups:
+- name: Critical Vulnerability Alerts
+  rules:
+  - alert: Critical Vulnerability Error
+    expr: sum by (vulnerability) (tenable_exporter_vulnerabilities{severity="Critical"}) >= 1
+    for: 10m
+    labels:
+      severity: Critical
+    annotations:
+      description: Tenable Scanner detected a critical vulnerability on {{ $value }} instances. Vulnerability is {{ $labels.vulnerability }}
+
+- name: Tenable Exporter Error
+  rules:
+  - alert: Tenable Exporter Error
+    expr: increase(tenable_exporter_error[1m]) > 0
+    for: 10m
+    labels:
+      severity: Critical
+    annotations:
+      description: Tenable Exporter is not running 
